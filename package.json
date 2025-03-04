@@ -1,8 +1,13 @@
 {
   "devDependencies": {
-    "@types/react-router-dom": "^5.3.3"
+    "@types/express": "^5.0.0",
+    "@types/react-router-dom": "^5.3.3",
+    "prisma": "^6.4.1",
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "pg": "^8.13.3",
     "react-router-dom": "^7.1.5"
   }
 }
