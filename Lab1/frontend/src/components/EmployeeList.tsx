@@ -5,7 +5,9 @@ import { Employee } from "../types";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [editingEmployee, setEditingEmployee] = useState<Employee | undefined>(undefined);
+  const [editingEmployee, setEditingEmployee] = useState<Employee | undefined>(
+    undefined
+  );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
@@ -35,20 +37,26 @@ const EmployeeList = () => {
   return (
     <div>
       <h2>Employee List</h2>
-      
+
       {/* Add Form Always Visible */}
       <EmployeeForm onSuccess={refreshEmployees} />
-      
+
       {/* Edit Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-5 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-bold mb-3">Edit Employee</h2>
-            <EmployeeForm employee={editingEmployee} onSuccess={() => {
-              refreshEmployees();
-              closeEditModal();
-            }} />
-            <button className="bg-gray-400 px-4 py-2 rounded mt-2" onClick={closeEditModal}>
+            <EmployeeForm
+              employee={editingEmployee}
+              onSuccess={() => {
+                refreshEmployees();
+                closeEditModal();
+              }}
+            />
+            <button
+              className="bg-gray-400 px-4 py-2 rounded mt-2"
+              onClick={closeEditModal}
+            >
               Cancel
             </button>
           </div>
@@ -68,13 +76,15 @@ const EmployeeList = () => {
           </tr>
         </thead>
         <tbody>
-          {employees.map(emp => (
+          {employees.map((emp) => (
             <tr key={emp.id}>
-              <td>{emp.firstName} {emp.lastName}</td>
-              <td>{emp.groupName}</td>
+              <td>
+                {emp.firstname} {emp.lastname}
+              </td>
+              <td>{emp.groupname}</td>
               <td>{emp.role}</td>
-              <td>{emp.expectedSalary}</td>
-              <td>{emp.expectedDateOfDefense}</td>
+              <td>{emp.expectedsalary}</td>
+              <td>{emp.expecteddateofdefense}</td>
               <td>
                 <button onClick={() => openEditModal(emp)}>Edit</button>
                 <button onClick={() => handleDelete(emp.id)}>Delete</button>

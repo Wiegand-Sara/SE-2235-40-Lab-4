@@ -9,7 +9,7 @@ interface Props {
 
 const EmployeeForm: React.FC<Props> = ({ employee, onSuccess }) => {
   const [form, setForm] = useState<Employee>({
-    id: 0, firstName: "", lastName: "", groupName: "", role: "", expectedSalary: 0, expectedDateOfDefense: ""
+    id: 10, firstname: "", lastname: "", groupname: "", role: "", expectedsalary: 0, expecteddateofdefense: ""
   });
 
   // Sync form when editing employee
@@ -33,12 +33,12 @@ const EmployeeForm: React.FC<Props> = ({ employee, onSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border">
-      <input type="text" name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name" required />
-      <input type="text" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name" required />
-      <input type="text" name="groupName" value={form.groupName} onChange={handleChange} placeholder="Group Name" required />
+      <input type="text" name="firstname" value={form.firstname} onChange={handleChange} placeholder="First Name" required />
+      <input type="text" name="lastname" value={form.lastname} onChange={handleChange} placeholder="Last Name" required />
+      <input type="text" name="groupname" value={form.groupname} onChange={handleChange} placeholder="Group Name" required />
       <input type="text" name="role" value={form.role} onChange={handleChange} placeholder="Role" required />
-      <input type="number" name="expectedSalary" value={form.expectedSalary} onChange={handleChange} placeholder="Salary" required />
-      <input type="date" name="expectedDateOfDefense" value={form.expectedDateOfDefense} onChange={handleChange} required />
+      <input type="number" name="expectedsalary" value={form.expectedsalary} onChange={handleChange} placeholder="Salary" required />
+      <input type="date" name="expecteddateofdefense" value={form.expecteddateofdefense} onChange={handleChange} required />
       <button type="submit">{employee ? "Update" : "Add"}</button>
     </form>
   );

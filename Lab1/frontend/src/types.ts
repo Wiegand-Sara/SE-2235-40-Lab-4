@@ -1,10 +1,10 @@
 export interface Employee {
     id: number;
-    firstName: string;
-    lastName: string;
-    groupName: string;
+    firstname: string;
+    lastname: string;
+    groupname: string;
     role: string;
-    expectedSalary: number;
-    expectedDateOfDefense: string;
+    expectedsalary: number;
+    expecteddateofdefense: string;
   }
   

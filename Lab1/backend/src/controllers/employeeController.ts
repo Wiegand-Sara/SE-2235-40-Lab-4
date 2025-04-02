@@ -1,36 +1,61 @@
 import { Request, Response } from "express";
+import { Pool } from "pg";
+import dotenv from "dotenv";
 
-let employees = [
-  { id: 1, firstName: "Alice", lastName: "Johnson", groupName: "Engineering", role: "Engineer", expectedSalary: 60000, expectedDateOfDefense: "2025-06-15" },
-  { id: 2, firstName: "Bob", lastName: "Smith", groupName: "Design", role: "Designer", expectedSalary: 45000, expectedDateOfDefense: "2025-07-10" },
-  { id: 3, firstName: "Charlie", lastName: "Brown", groupName: "Management", role: "Manager", expectedSalary: 70000, expectedDateOfDefense: "2025-05-20" },
-  { id: 4, firstName: "David", lastName: "Wilson", groupName: "Internship", role: "Intern", expectedSalary: 30000, expectedDateOfDefense: "2025-08-01" },
-  { id: 5, firstName: "Eve", lastName: "Taylor", groupName: "Human Resources", role: "HR", expectedSalary: 55000, expectedDateOfDefense: "2025-09-05" },
-];
+dotenv.config();
 
-export const getEmployees = (req: Request, res: Response): void => {
-  res.json(employees);
-};
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
-export const addEmployee = (req: Request, res: Response): void => {
-  const newEmployee = { id: employees.length + 1, ...req.body };
-  employees.push(newEmployee);
-  res.status(201).json(newEmployee);
-};
-
-export const updateEmployee = (req: Request, res: Response): void => {
-  const { id } = req.params;
-  const index = employees.findIndex(emp => emp.id === parseInt(id));
-  if (index === -1) {
-    res.status(404).json({ error: "Employee not found" });
-    return;
+export const getEmployees = async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query("SELECT * FROM employees");
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: "Database error", details: err });
   }
-  employees[index] = { ...employees[index], ...req.body };
-  res.json(employees[index]);
 };
 
-export const deleteEmployee = (req: Request, res: Response): void => {
+export const addEmployee = async (req: Request, res: Response) => {
+  const { firstname, lastname, groupname, role, expectedsalary, expecteddateofdefense } = req.body;
+  try {
+    const result = await pool.query(
+      "INSERT INTO employees (firstname, lastname, groupname, role, expectedsalary, expecteddateofdefense) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [firstname, lastname, groupname, role, expectedsalary, expecteddateofdefense]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: "Database error", details: err });
+  }
+};
+
+export const updateEmployee = async (req: Request, res: Response) => {
   const { id } = req.params;
-  employees = employees.filter(emp => emp.id !== parseInt(id));
-  res.status(204).send();
+  const { firstname, lastname, groupname, role, expectedsalary, expecteddateofdefense } = req.body;
+  try {
+    const result = await pool.query(
+      "UPDATE employees SET firstname=$1, lastname=$2, groupname=$3, role=$4, expectedsalary=$5, expecteddateofdefense=$6 WHERE id=$7 RETURNING *",
+      [firstname, lastname, groupname, role, expectedsalary, expecteddateofdefense, id]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: "Database error", details: err });
+  }
+};
+
+export const deleteEmployee = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query("DELETE FROM employees WHERE id=$1 RETURNING *", [id]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: "Database error", details: err });
+  }
 };
