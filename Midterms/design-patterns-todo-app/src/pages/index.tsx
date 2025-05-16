@@ -227,6 +227,7 @@ export default function Home() {
         </label>
         <select
           id="sortSelect"
+          data-testid="sort-select"
           className="px-3 py-2 border rounded"
           value={sortStrategy}
           onChange={(e) =>
