@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import { TaskFactory } from "../components/TaskFactory";
 import { Task, TaskType } from "../interfaces/Task";
 import { v4 as uuidv4 } from "uuid";
-import { Notification, TaskNotificationObserver } from "../components/Notification";
+import {
+  Notification,
+  TaskNotificationObserver,
+} from "../components/Notification";
 import { TaskSortingStrategy } from "../components/TaskSortingStrategy"; // Import TaskSortingStrategy
 
 export default function Home() {
@@ -16,7 +19,9 @@ export default function Home() {
   const [subTasks, setSubTasks] = useState<string[]>([]);
   const [newSubTaskText, setNewSubTaskText] = useState("");
   const [notifications, setNotifications] = useState<string[]>([]);
-  const [sortStrategy, setSortStrategy] = useState<'sortByDate' | 'sortByName' | 'sortById' | 'sortByCompletion'>('sortByDate'); // Add sortStrategy state
+  const [sortStrategy, setSortStrategy] = useState<
+    "sortByDate" | "sortByName" | "sortById" | "sortByCompletion"
+  >("sortByDate"); // Add sortStrategy state
 
   // Load tasks from localStorage on mount
   useEffect(() => {
@@ -112,16 +117,16 @@ export default function Home() {
   // Sort tasks based on selected strategy
   let sortedTasks: Task[] = [...tasks];
   switch (sortStrategy) {
-    case 'sortByDate':
+    case "sortByDate":
       sortedTasks = TaskSortingStrategy.sortByDate(tasks);
       break;
-    case 'sortByName':
+    case "sortByName":
       sortedTasks = TaskSortingStrategy.sortByName(tasks);
       break;
-    case 'sortById':
+    case "sortById":
       sortedTasks = TaskSortingStrategy.sortById(tasks);
       break;
-    case 'sortByCompletion':
+    case "sortByCompletion":
       sortedTasks = TaskSortingStrategy.sortByCompletion(tasks);
       break;
     default:
@@ -158,6 +163,7 @@ export default function Home() {
         />
 
         <select
+          data-testid="task-type-select"
           className="w-full px-3 py-2 border rounded"
           value={taskType}
           onChange={(e) => setTaskType(e.target.value as TaskType)}
@@ -223,7 +229,15 @@ export default function Home() {
           id="sortSelect"
           className="px-3 py-2 border rounded"
           value={sortStrategy}
-          onChange={(e) => setSortStrategy(e.target.value as 'sortByDate' | 'sortByName' | 'sortById' | 'sortByCompletion')}
+          onChange={(e) =>
+            setSortStrategy(
+              e.target.value as
+                | "sortByDate"
+                | "sortByName"
+                | "sortById"
+                | "sortByCompletion"
+            )
+          }
         >
           <option value="sortByDate">Due Date</option>
           <option value="sortByName">Name</option>

@@ -19,6 +19,7 @@ const TaskContainer: React.FC<React.PropsWithChildren<TaskProps>> = ({
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -10 }}
+    data-testid="task-item"
     className={`p-4 rounded-xl shadow-md border flex justify-between items-start gap-4 ${
       task.type === TaskType.TIMED
         ? "bg-blue-50 border-blue-200"
@@ -46,6 +47,7 @@ const ActionButtons: React.FC<{
       </button>
     )}
     <button
+      data-testid="delete-button"
       onClick={onDelete}
       className="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full transition"
     >
@@ -93,7 +95,16 @@ const TimedTask: React.FC<TaskProps> = ({ task, onComplete, onDelete }) => (
       )}
       {task.dueDate && (
         <p className="text-xs text-blue-500 mt-1">
-          Due: {new Date(task.dueDate).toLocaleString()}
+          Due:{" "}
+          {new Date(task.dueDate).toLocaleString("en-PH", {
+            month: "numeric",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            hour12: true,
+          })}
         </p>
       )}
     </div>
